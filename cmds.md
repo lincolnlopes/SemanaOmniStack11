@@ -12,5 +12,6 @@ AULA 02
 http://knexjs.org/#Migrations
 
 ➜ npx knex migrate:make create_ongs
+➜ npx knex migrate:make create_incidents
 ➜ npx knex migrate:latest  
 ➜

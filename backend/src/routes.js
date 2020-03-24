@@ -1,7 +1,10 @@
 const express = require("express");
+const crypto = require("crypto");
+
+const connection = require("./database/connection");
 
 const routes = express.Router();
-
+/*
 routes.get("/user/:idade", (req, res) => {
   const queryParams = req.query;
   const routeParams = req.params;
@@ -17,16 +20,22 @@ routes.get("/user/:idade", (req, res) => {
     aluno: "@lincolngyn"
   });
 });
+*/
+routes.get("/ongs", async (req, res) => {
+  const ongs = await connection("ongs").select("*");
+  return res.json(ongs);
+});
 
-routes.post("/user", (req, res) => {
-  const params = req.query;
-  console.log(params);
+routes.post("/ongs", async (req, res) => {
+  const { name, email, whatsapp, city, uf } = req.body;
 
-  return res.json({
-    method: "POST",
-    mensagem: "Hello World!",
-    aluno: "@lincolngyn"
-  });
+  const id = crypto.randomBytes(4).toString("HEX");
+  //console.log(req.body, id);
+
+  //Não funciona sem ser async ==> Poquê?
+  await connection("ongs").insert({ id, name, email, whatsapp, city, uf });
+
+  return res.json({ id });
 });
 
 module.exports = routes;
