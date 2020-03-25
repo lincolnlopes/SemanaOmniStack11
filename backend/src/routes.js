@@ -1,7 +1,8 @@
 const express = require("express");
-const crypto = require("crypto");
-
-const connection = require("./database/connection");
+const OngController = require("./controllers/OngController");
+const IncidentController = require("./controllers/IncidentController");
+const ProfileController = require("./controllers/ProfileController");
+const SessionController = require("./controllers/SessionController");
 
 const routes = express.Router();
 /*
@@ -21,21 +22,16 @@ routes.get("/user/:idade", (req, res) => {
   });
 });
 */
-routes.get("/ongs", async (req, res) => {
-  const ongs = await connection("ongs").select("*");
-  return res.json(ongs);
-});
 
-routes.post("/ongs", async (req, res) => {
-  const { name, email, whatsapp, city, uf } = req.body;
+routes.get("/ongs", OngController.index);
+routes.post("/ongs", OngController.create);
+routes.delete("/ongs/:id", OngController.delete);
 
-  const id = crypto.randomBytes(4).toString("HEX");
-  //console.log(req.body, id);
+routes.get("/incidents", IncidentController.index);
+routes.post("/incidents", IncidentController.create);
+routes.delete("/incidents/:id", IncidentController.delete);
 
-  //Não funciona sem ser async ==> Poquê?
-  await connection("ongs").insert({ id, name, email, whatsapp, city, uf });
+routes.get("/sessions", SessionController.create);
 
-  return res.json({ id });
-});
-
+routes.get("/profile", ProfileController.index);
 module.exports = routes;
