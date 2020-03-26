@@ -2,14 +2,25 @@ const connection = require("../database/connection");
 
 module.exports = {
   async index(req, res) {
-    const incidents = await connection("incidents").select("*");
+    const { page = 1 } = req.query;
+    const [count] = await connection("incidents").count("id as count");
+    //console.log(count["count"]);
 
-    return res.json(incidents);
+    //const count = await connection("incidents").count("id as count");
+    const incidents = await connection("incidents")
+      .limit(5)
+      .offset((page - 1) * 5)
+      .select("*");
+
+    //res.header("X-Total-Count", count[0].count);
+    res.header("X-Total-Count", count["count"]);
+    //return res.json({ incidents, ...count[0] });
+    return res.json({ incidents, ...count });
   },
 
   async create(req, res) {
     const { title, description, value } = req.body;
-    const { ong_id } = req.headers.authorization;
+    const ong_id = req.headers.authorization;
     console.log({ title, description, value, ong_id });
     //const id = result[0]
     const [id] = await connection("incidents").insert({
