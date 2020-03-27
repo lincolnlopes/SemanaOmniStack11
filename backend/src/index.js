@@ -8,4 +8,6 @@ app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(routes);
 
-app.listen(3000);
+const PORT = 3001 || process.env.PORT;
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
