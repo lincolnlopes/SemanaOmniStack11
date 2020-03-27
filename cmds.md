@@ -21,3 +21,5 @@ http://knexjs.org/#Migrations
 ➜ git remote add origin https://github.com/lincolnlopes/SemanaOmniStack11.git
 ➜ git pull upstream master --force
 ➜ git push --force
+
+➜ npm install react-icons    
